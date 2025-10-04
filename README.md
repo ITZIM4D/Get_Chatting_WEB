@@ -2,46 +2,48 @@
 This project is a web-based chat application that enables real-time messaging using Node.js, React.js, and Socket.IO.
 
 ## Table of Contents
--[Installation](#installation)
--[Running the Project](#running-the-project)
+-[Prerequisites](#prerequisites)
+-[Installation and Running](#installation-and-running)
 -[Features](#features)
+-[Tech Stack](#tech-stack)
 
-## Installation
+## Prerequisites
+- [Docker](https://docs.docker.com/get-docker/)  
+- [Docker Compose](https://docs.docker.com/compose/)
+
+## Installation and Running
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-username/get-chatting-web.git
+   git clone https://github.com/ITZIM4D/Get_Chatting_WEB
    cd get-chatting-web
    ```
 
-2. **Install backend dependencies:**
+2. **Make .env file**
+   The environment variables you need to fill in are:
    ```bash
-   cd backend
-   npm install
+   DATABASE_URL=postgres://chatuser:@localhost:5432/chatdb
+   POSTGRES_USER=postgres
+   POSTGRES_PASSWORD=password
    ```
 
-3. **Install frontend dependencies:**
+
+3. **Build the docker image:**
    ```bash
-   cd ../frontend
-   npm install
+   docker-compose build
    ```
 
-## Running the Project
-
-1. **Start the backend server:**
+4. **Start the service:**
    ```bash
-   cd backend
-   npm start
+   docker-compose up
    ```
-
-2. **Start the frontend development server:**
+   ##### Or run in detached mode:
    ```bash
-   cd ../frontend
-   npm start
+   docker-compose up -d
    ```
 
-3. **Open your browser and go to:**
-   ```
+5. **Open your browser and go to:**
+   ```bash 
    http://localhost:5173
    ```
 
@@ -49,3 +51,9 @@ Make sure you have [Node.js](https://nodejs.org/) installed either through the l
 
 ## Features
 - Global Chat between users
+
+## Tech Stack
+- **Frontend:** React.js  
+- **Backend:** Node.js, Socket\.IO  
+- **Database:** PostgreSQL  
+- **Containerization:** Docker  

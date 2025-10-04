@@ -1,0 +1,27 @@
+# Node dependencies
+node_modules
+npm-debug.log
+
+# Build output
+build/
+dist/
+
+# Local environment/config
+.env
+.env.*
+
+# Version control
+.git
+.gitignore
+
+# IDE/editor files
+.vscode/
+
+# Logs and temp files
+*.log
+*.tmp
+*.swp
+
+# Docker files
+Dockerfile
+.dockerignore
