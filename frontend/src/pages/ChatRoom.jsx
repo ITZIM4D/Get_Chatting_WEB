@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import socket from "../javascript/socket";
+import "../styles/ChatRoom.module.css"
 
 function ChatRoom() {
     const { roomId } = useParams();
@@ -12,13 +13,13 @@ function ChatRoom() {
     // Call param function once on first render
     useEffect(() => {
         const handleMessage = (msg) => {
-        setMessages((prev) => [...prev, msg]);
+            setMessages((prev) => [...prev, msg]);
         };
 
         socket.on("receiveMessage", handleMessage);
 
         return () => {
-        socket.off("receiveMessage", handleMessage); // Cleanup to avoid duplicates
+            socket.off("receiveMessage", handleMessage); // Cleanup to avoid duplicates
         };
     }, [roomId]);
 
@@ -28,6 +29,7 @@ function ChatRoom() {
         setMessage("");
     };
 
+    // Remake chatbox eventually
     return (
         <div>
             <h1>Chat</h1>
