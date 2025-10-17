@@ -1,11 +1,14 @@
 import { HelmetProvider } from 'react-helmet-async';
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import socket from "../javascript/socket";
 import styles from "../styles/Login.module.css"
 
 function Login () {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+
+    const navigate = useNavigate();
 
     const attemptLogin = async (e) => {
         e.preventDefault(); // stop form from reloading page
@@ -19,6 +22,9 @@ function Login () {
 
     const correctLogin = () => {
         console.log("You successfully logged in!");
+
+        sessionStorage.setItem("username", username); // Make username persist during sesssion
+        navigate("/room/1");
     }
 
     const incorrectLogin = () => {
