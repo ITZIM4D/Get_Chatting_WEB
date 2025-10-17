@@ -32,6 +32,7 @@ io.on("connection", (socket) => {
   // Listen for messages from THIS socket
   socket.on("sendMessage", async (msg) => {
     try {
+      // Result is blocking so async/await makes it asynchronously run until it returns
       const result = await pool.query(
         "INSERT INTO messages (content) VALUES ($1) RETURNING *",
         [msg]
@@ -40,17 +41,34 @@ io.on("connection", (socket) => {
       // Broadcast the saved message to all clients
       io.emit("receiveMessage", result.rows[0]);
     } catch (err) {
-      console.error("DB error:", err);
+      console.error("DB error in receiveMessage:", err);
     }
   });
 
-  // Handle disconnect
   socket.on("disconnect", () => {
     console.log("User disconnected:", socket.id);
   });
+
+  socket.on("attemptLogin", async (username, password) => {
+    try {
+      const result = await pool.query(
+        "SELECT username, password FROM users WHERE username = ($1)" , [username]
+      );
+      const storedUsername = result.rows[0]['username'];
+      const storedPassword = result.rows[0]['password'];
+      if (storedUsername == username && storedPassword == password) {
+        io.emit("loginSuccess", true);
+      } else {
+        io.emit("loginSuccess", false);
+      }
+    } catch (err) {
+      console.error("DB error in attemptLogin:", err);
+    }
+  });
+
 });
 
-// Start server
+// Server is on port 8080
 server.listen(8080, () => {
   console.log("Server with Socket.io running on http://localhost:8080");
 });

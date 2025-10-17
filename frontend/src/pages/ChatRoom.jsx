@@ -29,6 +29,8 @@ function ChatRoom() {
         setMessage("");
     };
 
+    
+
     // Remake chatbox eventually
     return (
         <div>

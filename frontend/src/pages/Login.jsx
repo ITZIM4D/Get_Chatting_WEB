@@ -1,26 +1,56 @@
-import { Helmet } from "react-helmet"
-import { useEffect, useState } from "react";
+import { HelmetProvider } from 'react-helmet-async';
+import { useState } from "react";
+import socket from "../javascript/socket";
 import styles from "../styles/Login.module.css"
 
 function Login () {
-    const[userName, setMessage] = useState("");
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
 
-    const attemptLogin = () => {
-        console.log("Yay!");
+    const attemptLogin = async (e) => {
+        e.preventDefault(); // stop form from reloading page
+        socket.emit("attemptLogin", username, password);
+
+        await socket.on("loginSuccess", (isSuccessful) => {
+            isSuccessful ? correctLogin(): incorrectLogin();
+        });
+
+    }
+
+    const correctLogin = () => {
+        console.log("You successfully logged in!");
+    }
+
+    const incorrectLogin = () => {
+        console.log("Incorrect username or password");
     }
 
     return (
         <>
-            <Helmet>
+            <HelmetProvider>
                 <title> Login </title>
-            </Helmet>
+            </HelmetProvider>
             <div className={styles.login}>
                 <h1> Login </h1>
-                <label htmlFor="username"> Username </label>
-                <input type="text" id="username" name="username"/>
-                <label htmlFor="password"> Password </label>
-                <input type="text" id= "password" name="password"/>
-                <button onClick={attemptLogin}>Login</button>
+                <form onSubmit={attemptLogin}>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        name="username" 
+                        placeholder="Username" 
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                    /><br/><br/>
+                    <input 
+                        type="password"
+                        id= "password" 
+                        name="password" 
+                        placeholder="Password" 
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    /><br/><br/>
+                    <input type="submit" value="Login"/>
+                </form>
             </div>
         </>
     );
