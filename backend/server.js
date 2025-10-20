@@ -29,15 +29,14 @@ app.get("/", (req, res) => {
 io.on("connection", (socket) => {
   console.log("A user connected:", socket.id);
 
-  // Listen for messages from THIS socket
-  socket.on("sendMessage", async (msg) => {
+  // Listen for messages from this socket
+  socket.on("sendMessage", async (roomID, userID, message) => {
     try {
       // Result is blocking so async/await makes it asynchronously run until it returns
       const result = await pool.query(
-        "INSERT INTO messages (content) VALUES ($1) RETURNING *",
-        [msg]
+        "INSERT INTO messages (chatroom_id, user_id, content) VALUES ($1, $2, $3) RETURNING *",
+        [roomID, userID, message]
       );
-
       // Broadcast the saved message to all clients
       io.emit("receiveMessage", result.rows[0]);
     } catch (err) {
@@ -52,14 +51,22 @@ io.on("connection", (socket) => {
   socket.on("attemptLogin", async (username, password) => {
     try {
       const result = await pool.query(
-        "SELECT username, password FROM users WHERE username = ($1)" , [username]
+        "SELECT id, username, password FROM users WHERE username = ($1)" , [username]
       );
+
+    if (result.rows.length === 0) {
+      io.emit("loginSuccess", false, -1);
+      return;
+    }
+
       const storedUsername = result.rows[0]['username'];
       const storedPassword = result.rows[0]['password'];
+      const storedUserID   = result.rows[0]['id'];
+
       if (storedUsername == username && storedPassword == password) {
-        io.emit("loginSuccess", true);
+        io.emit("loginSuccess", true, storedUserID);
       } else {
-        io.emit("loginSuccess", false);
+        io.emit("loginSuccess", false, -1);
       }
     } catch (err) {
       console.error("DB error in attemptLogin:", err);

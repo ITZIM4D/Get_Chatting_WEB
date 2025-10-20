@@ -25,7 +25,12 @@ function ChatRoom() {
 
     const sendMessage = () => {
         if (message.trim() === "") return;
-        socket.emit("sendMessage", { roomId, content: message });
+        const user = JSON.parse(sessionStorage.getItem("user"));
+        const userID = user.userID;
+        const roomID = user.roomID;
+
+        socket.emit("sendMessage", roomID, userID, message);
+
         setMessage("");
     };
 

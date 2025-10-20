@@ -7,28 +7,35 @@ import styles from "../styles/Login.module.css"
 function Login () {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError]       = useState("");
 
     const navigate = useNavigate();
 
     const attemptLogin = async (e) => {
-        e.preventDefault(); // stop form from reloading page
+        e.preventDefault(); // Stop form from reloading page
+        setError(""); // Clear old errors
         socket.emit("attemptLogin", username, password);
 
-        await socket.on("loginSuccess", (isSuccessful) => {
-            isSuccessful ? correctLogin(): incorrectLogin();
+        await socket.on("loginSuccess", (isSuccessful, userID) => {
+            isSuccessful ? correctLogin(userID): incorrectLogin();
         });
 
     }
 
-    const correctLogin = () => {
+    const correctLogin = (userID) => {
         console.log("You successfully logged in!");
 
-        sessionStorage.setItem("username", username); // Make username persist during sesssion
+        const user = {
+            "username": username, 
+            "roomID": 1,
+            "userID": userID
+        }
+        sessionStorage.setItem("user", JSON.stringify(user)); // Make user data persist during sesssion
         navigate("/room/1");
     }
 
     const incorrectLogin = () => {
-        console.log("Incorrect username or password");
+        setError("Incorrect username or password");
     }
 
     return (
@@ -57,6 +64,7 @@ function Login () {
                     /><br/><br/>
                     <input type="submit" value="Login"/>
                 </form>
+                {error && <p className={styles.error}>{error}</p>}
             </div>
         </>
     );
