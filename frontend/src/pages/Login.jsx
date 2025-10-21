@@ -19,7 +19,6 @@ function Login () {
         await socket.on("loginSuccess", (isSuccessful, userID) => {
             isSuccessful ? correctLogin(userID): incorrectLogin();
         });
-
     }
 
     const correctLogin = (userID) => {
@@ -30,7 +29,9 @@ function Login () {
             "roomID": 1,
             "userID": userID
         }
+
         sessionStorage.setItem("user", JSON.stringify(user)); // Make user data persist during sesssion
+        socket.off("loginSuccess");
         navigate("/room/1");
     }
 
@@ -44,27 +45,32 @@ function Login () {
                 <title> Login </title>
             </HelmetProvider>
             <div className={styles.login}>
-                <h1> Login </h1>
-                <form onSubmit={attemptLogin}>
-                    <input 
-                        type="text" 
-                        id="username" 
-                        name="username" 
-                        placeholder="Username" 
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                    /><br/><br/>
-                    <input 
-                        type="password"
-                        id= "password" 
-                        name="password" 
-                        placeholder="Password" 
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                    /><br/><br/>
-                    <input type="submit" value="Login"/>
-                </form>
-                {error && <p className={styles.error}>{error}</p>}
+                <div>
+                    <h1> Login </h1>
+                    <form onSubmit={attemptLogin}>
+                        <input 
+                            type="text" 
+                            id="username" 
+                            name="username" 
+                            placeholder="Username" 
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                        /><br/><br/>
+                        <input 
+                            type="password"
+                            id= "password" 
+                            name="password" 
+                            placeholder="Password" 
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        /><br/><br/>
+                        <input type="submit" value="Login"/>
+                    </form>
+                    {error && <p className={styles.error}>{error}</p>}
+                    </div>
+                    <div className={styles.register}>
+                        <input type="button" value="Register" onClick={() => navigate("/registration")}/>
+                    </div>
             </div>
         </>
     );

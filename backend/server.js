@@ -33,12 +33,18 @@ io.on("connection", (socket) => {
   socket.on("sendMessage", async (roomID, userID, message) => {
     try {
       // Result is blocking so async/await makes it asynchronously run until it returns
-      const result = await pool.query(
+      const messagesResult = await pool.query(
         "INSERT INTO messages (chatroom_id, user_id, content) VALUES ($1, $2, $3) RETURNING *",
         [roomID, userID, message]
       );
-      // Broadcast the saved message to all clients
-      io.emit("receiveMessage", result.rows[0]);
+
+      const usersResult = await pool.query(
+        "SELECT (username) FROM users WHERE id = $1", 
+        [userID]
+      )
+      
+      // Broadcast the saved message to clients
+      io.emit("receiveMessage", messagesResult.rows[0]["content"], usersResult.rows[0]["username"]);
     } catch (err) {
       console.error("DB error in receiveMessage:", err);
     }
@@ -51,7 +57,8 @@ io.on("connection", (socket) => {
   socket.on("attemptLogin", async (username, password) => {
     try {
       const result = await pool.query(
-        "SELECT id, username, password FROM users WHERE username = ($1)" , [username]
+        "SELECT id, username, password FROM users WHERE username = ($1)",
+        [username]
       );
 
     if (result.rows.length === 0) {

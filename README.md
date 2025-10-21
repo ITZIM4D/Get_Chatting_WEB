@@ -27,7 +27,6 @@ This project is a web-based chat application that enables real-time messaging us
    POSTGRES_PASSWORD=password
    ```
 
-
 3. **Build the docker image:**
    ```bash
    docker-compose build
@@ -50,7 +49,9 @@ This project is a web-based chat application that enables real-time messaging us
 Make sure you have [Node.js](https://nodejs.org/) installed either through the link or through your package manager of choice.
 
 ## Features
+- Logging in as a user
 - Global Chat between users
+
 
 ## Tech Stack
 - **Frontend:** React.js  

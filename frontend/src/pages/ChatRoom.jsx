@@ -9,11 +9,13 @@ function ChatRoom() {
     // Track user input and chat history w/ state variables
     const [message, setMessage] = useState("");
     const [messages, setMessages] = useState([]);
+    const [username, setUsername] = useState("");
 
     // Call param function once on first render
     useEffect(() => {
-        const handleMessage = (msg) => {
+        const handleMessage = (msg, username) => {
             setMessages((prev) => [...prev, msg]);
+            setUsername(username);
         };
 
         socket.on("receiveMessage", handleMessage);
@@ -21,7 +23,7 @@ function ChatRoom() {
         return () => {
             socket.off("receiveMessage", handleMessage); // Cleanup to avoid duplicates
         };
-    }, [roomId]);
+}, [roomId]);
 
     const sendMessage = () => {
         if (message.trim() === "") return;
@@ -42,7 +44,7 @@ function ChatRoom() {
             <h1>Chat</h1>
             <div style={{ border: "1px solid #ccc", height: "200px", overflowY: "scroll" }}>
                 {messages.map((m, i) => (
-                <div key={i}>{m.content || m}</div>
+                <div key={i}>{username + ": " + (m.content || m)}</div>
                 ))}
             </div>
             <input value={message} onChange={(e) => setMessage(e.target.value)} />
