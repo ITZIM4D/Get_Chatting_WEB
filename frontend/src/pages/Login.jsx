@@ -1,5 +1,5 @@
-import { HelmetProvider } from 'react-helmet-async';
-import { useState } from "react";
+import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import socket from "../javascript/socket";
 import styles from "../styles/Login.module.css"
@@ -7,42 +7,49 @@ import styles from "../styles/Login.module.css"
 function Login () {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [error, setError]       = useState("");
-
+    const [error, setError] = useState("");
+    const [userID, setUserID] = useState(null);
     const navigate = useNavigate();
 
-    const attemptLogin = async (e) => {
+    const attemptLogin = (e) => {
         e.preventDefault(); // Stop form from reloading page
         setError(""); // Clear old errors
         socket.emit("attemptLogin", username, password);
-
-        await socket.on("loginSuccess", (isSuccessful, userID) => {
-            isSuccessful ? correctLogin(userID): incorrectLogin();
-        });
     }
 
-    const correctLogin = (userID) => {
-        console.log("You successfully logged in!");
-
-        const user = {
-            "username": username, 
-            "roomID": 1,
-            "userID": userID
+    useEffect(() => {
+        function handleLoginSuccess(isSuccessful, id) {
+            if (isSuccessful) {
+                setUserID(id);
+            }  
+            else {
+                setError("Incorrect username or password");
+                setPassword("");
+            }
         }
 
-        sessionStorage.setItem("user", JSON.stringify(user)); // Make user data persist during sesssion
-        socket.off("loginSuccess");
-        navigate("/room/1");
-    }
+        socket.on("loginSuccess", handleLoginSuccess);
 
-    const incorrectLogin = () => {
-        setError("Incorrect username or password");
-    }
+        return () => {
+            socket.off("loginSuccess", handleLoginSuccess);
+        };
+    }, [username, password]); 
+
+    useEffect(() => {
+        if (userID) {
+            const user = { username, roomID: 1, userID };
+            sessionStorage.setItem("user", JSON.stringify(user));
+            navigate("/room/1");
+        }
+    }, [userID, navigate, username]);
+
 
     return (
         <>
             <HelmetProvider>
-                <title> Login </title>
+                <Helmet>
+                    <title> Login </title>
+                </Helmet>
             </HelmetProvider>
             <div className={styles.login}>
                 <div>

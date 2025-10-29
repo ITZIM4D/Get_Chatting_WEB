@@ -1,0 +1,17 @@
+.buttonOverlay {
+    display: flex;
+    border-bottom: 1px solid rgb(255, 255, 255);
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.buttonOverlay button {
+    color: white;
+    background-color: Transparent;
+    border: none;
+    cursor: pointer;
+    margin-right: 40px;
+    font-size: 20px;
+    font-weight:bold
+    
+}

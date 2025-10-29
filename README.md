@@ -49,8 +49,9 @@ This project is a web-based chat application that enables real-time messaging us
 Make sure you have [Node.js](https://nodejs.org/) installed either through the link or through your package manager of choice.
 
 ## Features
-- Logging in as a user
+- Logging in and out as a user
 - Global Chat between users
+- Registering as a user
 
 
 ## Tech Stack

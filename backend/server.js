@@ -34,12 +34,12 @@ io.on("connection", (socket) => {
     try {
       // Result is blocking so async/await makes it asynchronously run until it returns
       const messagesResult = await pool.query(
-        "INSERT INTO messages (chatroom_id, user_id, content) VALUES ($1, $2, $3) RETURNING *",
+        "INSERT INTO Messages (chatroom_id, user_id, content) VALUES ($1, $2, $3) RETURNING *",
         [roomID, userID, message]
       );
 
       const usersResult = await pool.query(
-        "SELECT (username) FROM users WHERE id = $1", 
+        "SELECT (username) FROM Users WHERE id = $1", 
         [userID]
       )
       
@@ -56,13 +56,14 @@ io.on("connection", (socket) => {
 
   socket.on("attemptLogin", async (username, password) => {
     try {
+      username = username.trim().toLowerCase();
       const result = await pool.query(
-        "SELECT id, username, password FROM users WHERE username = ($1)",
+        "SELECT id, username, password FROM Users WHERE username = ($1)",
         [username]
       );
 
     if (result.rows.length === 0) {
-      io.emit("loginSuccess", false, -1);
+      socket.emit("loginSuccess", false, -1);
       return;
     }
 
@@ -71,14 +72,37 @@ io.on("connection", (socket) => {
       const storedUserID   = result.rows[0]['id'];
 
       if (storedUsername == username && storedPassword == password) {
-        io.emit("loginSuccess", true, storedUserID);
+        socket.emit("loginSuccess", true, storedUserID);
       } else {
-        io.emit("loginSuccess", false, -1);
+        socket.emit("loginSuccess", false, -1);
       }
     } catch (err) {
-      console.error("DB error in attemptLogin:", err);
+      console.error("Error in attemptLogin:", err);
     }
   });
+
+  socket.on("attemptRegister", async (newUsername, newPassword) => {
+    try {
+      newUsername = newUsername.toLowerCase();
+      const result = await pool.query(
+        "SELECT username FROM Users WHERE username = $1", 
+        [newUsername]
+      )
+
+      if (result.rows[0] == undefined) {
+        await pool.query(
+          "INSERT INTO Users (username, password) VALUES ($1, $2)",
+          [newUsername, newPassword]
+        );
+        socket.emit("registerSuccess");
+      } else {
+        let err = "Username already exists"
+        socket.emit("registerFail", err);
+      }
+    } catch (err) {
+      console.error("Error in attemptRegister", err);
+    }
+  })
 
 });
 
