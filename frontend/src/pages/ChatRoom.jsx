@@ -1,4 +1,4 @@
-import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { Helmet, HelmetProvider } from "react-helmet-async";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import socket from "../javascript/socket";
@@ -6,18 +6,23 @@ import "../styles/ChatRoom.module.css";
 import ButtonOverlay from "./ButtonOverlay.jsx";
 
 function ChatRoom() {
-    const { roomId } = useParams();
-
-    // Track user input and chat history w/ state variables
+    const { roomID } = useParams();
+    const roomInfo = {roomID: roomID};
     const [message, setMessage] = useState("");
     const [messages, setMessages] = useState([]);
     const [username, setUsername] = useState("");
+    const [roomName, setRoomName] = useState("");
     const navigate = useNavigate();
     const user = JSON.parse(sessionStorage.getItem("user"));
 
-    if (user == null) {
-        navigate("/");
-    }
+    // Redirect if user isn't logged in
+    useEffect(() => {
+        if (!user) {
+            navigate("/");
+        }
+    }, [user, navigate]);
+
+    if (!user) { return null; }
 
     // Call param function once on first render
     useEffect(() => {
@@ -29,9 +34,9 @@ function ChatRoom() {
         socket.on("receiveMessage", handleMessage);
 
         return () => {
-            socket.off("receiveMessage", handleMessage); // Cleanup to avoid duplicates
+            socket.off("receiveMessage", handleMessage); 
         };
-}, [roomId]);
+    }, []);
 
     const sendMessage = () => {
         if (message.trim() === "") return;

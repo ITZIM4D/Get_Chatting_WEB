@@ -13,5 +13,26 @@
     margin-right: 40px;
     font-size: 20px;
     font-weight:bold
-    
+}
+
+.popup {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.popupContent {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 50vw;
+    max-width: 500px; 
+    background: white;
+    padding: 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.3);
 }
