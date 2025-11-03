@@ -52,31 +52,34 @@ function Login () {
                 </Helmet>
             </HelmetProvider>
             <div className={styles.login}>
-                <div>
-                    <h1> Login </h1>
-                    <form onSubmit={attemptLogin}>
-                        <input 
-                            type="text" 
-                            id="username" 
-                            name="username" 
-                            placeholder="Username" 
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                        /><br/><br/>
-                        <input 
-                            type="password"
-                            id= "password" 
-                            name="password" 
-                            placeholder="Password" 
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        /><br/><br/>
-                        <input type="submit" value="Login"/>
-                    </form>
-                    {error && <p className={styles.error}>{error}</p>}
-                    </div>
-                    <div className={styles.register}>
-                        <input type="button" value="Register" onClick={() => navigate("/registration")}/>
+                <div className = {styles.loginBox}>
+                    <div>
+                        <h1> Login </h1>
+                        <form onSubmit={attemptLogin}>
+                            <input 
+                                type="text" 
+                                id="username" 
+                                name="username" 
+                                placeholder="Username" 
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                            /><br/><br/>
+                            <input 
+                                type="password"
+                                id= "password" 
+                                name="password" 
+                                placeholder="Password" 
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                            /><br/><br/>
+                            {error && <p className={styles.error}>{error}</p>}
+                            <input type="submit" value="Login"/>
+                        </form>
+
+                        </div>
+                        <div className={styles.register}>
+                            <input type="button" value="Register" onClick={() => navigate("/registration")}/>
+                        </div>
                     </div>
             </div>
         </>

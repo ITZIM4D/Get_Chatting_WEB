@@ -1,7 +1,19 @@
 .login {
-    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.loginBox {
+
 }
 
 .register {
-    
+    margin-top: 20px;
+}
+
+.error {
+    margin-top: 0px;
 }

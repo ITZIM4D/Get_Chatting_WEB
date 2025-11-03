@@ -21,9 +21,25 @@ function ButtonOverlay () {
     const submitRoom = () => {
         socket.emit("createRoom", roomName, roomDesc);
         setShowPopup(false);
-        setRoomName("")
+        setRoomName("");
         setRoomDesc("");
     };
+
+    const joinRoom = () => {
+        let user = JSON.parse(sessionStorage.getItem("user"));
+        setRoomID(0); 
+        user.roomID = 0;
+        sessionStorage.setItem("user", JSON.stringify(user));
+        navigate("/join-room");
+    }
+
+    const settings = () => {
+        let user = JSON.parse(sessionStorage.getItem("user"));
+        setRoomID(0); 
+        user.roomID = 0;
+        sessionStorage.setItem("user", JSON.stringify(user));
+        navigate("/settings");
+    }
 
     useEffect(() => {
         socket.on("createRoomSuccess", (newRoomID) => {
@@ -43,16 +59,19 @@ function ButtonOverlay () {
     }, [])
 
     useEffect(() => {
-        navigate("/room/" + roomID);
+        if (roomID > 0) {
+            navigate("/room/" + roomID);
+        }
     }, [roomID])
 
     return (
         <>
             <div className={styles.buttonOverlay}>
-                <button onClick={generalChat}> General Chat </button>
-                <button onClick={() => {setShowPopup(true)}}> Create Chatroom</button>
-                <button onClick={() => {navigate("/settings")}}> Settings </button>
-                <button onClick={() => {sessionStorage.clear(); navigate("/")}}> Logout </button>
+                <button className={styles.buttonOverlayButton} onClick={generalChat}> Global Chat </button>
+                <button className={styles.buttonOverlayButton} onClick={joinRoom}> Join Chatroom </button>
+                <button className={styles.buttonOverlayButton} onClick={() => {setShowPopup(true)}}> Create Chatroom </button>
+                <button className={styles.buttonOverlayButton} onClick={settings}> Settings </button>
+                <button className={styles.buttonOverlayButton} onClick={() => {sessionStorage.clear(); navigate("/")}}> Logout </button>
             </div>
 
             {showPopup && (

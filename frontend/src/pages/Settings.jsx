@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
+import ButtonOverlay from "./ButtonOverlay.jsx";
 
 function Settings() {
     const user = JSON.parse(sessionStorage.getItem("user"));
@@ -22,6 +23,7 @@ function Settings() {
                     <title> Settings </title>
                 </Helmet>
             </HelmetProvider>
+            <ButtonOverlay/>
         </>
     );
 }

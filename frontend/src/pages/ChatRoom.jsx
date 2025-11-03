@@ -7,7 +7,7 @@ import ButtonOverlay from "./ButtonOverlay.jsx";
 
 function ChatRoom() {
     const { roomID } = useParams();
-    const roomInfo = {roomID: roomID};
+    const [roomInfo, setRoomInfo] = useState(null);
     const [message, setMessage] = useState("");
     const [messages, setMessages] = useState([]);
     const [username, setUsername] = useState("");
@@ -30,13 +30,18 @@ function ChatRoom() {
             setMessages((prev) => [...prev, msg]);
             setUsername(username);
         };
+        socket.emit("getRoomInfo", roomID);
 
         socket.on("receiveMessage", handleMessage);
+        socket.on("getRoomInfo", (roomInfo) => {
+            setRoomInfo(roomInfo);
+        })
 
         return () => {
             socket.off("receiveMessage", handleMessage); 
+            socket.off("getRoomInfo");
         };
-    }, []);
+    }, [roomID]);
 
     const sendMessage = () => {
         if (message.trim() === "") return;
@@ -55,15 +60,15 @@ function ChatRoom() {
         <>
             <HelmetProvider>
                 <Helmet>
-                    <title> {"{Room Name}"} </title>
+                    <title> {roomInfo?.name || "Loading..."} </title>
                 </Helmet>
             </HelmetProvider>
             <ButtonOverlay/>
             <div>
-                <h1>Chat</h1>
+                <h1>{roomInfo?.name || "Loading..."}</h1>
                 <div style={{ border: "1px solid #ccc", height: "200px", overflowY: "scroll" }}>
                     {messages.map((m, i) => (
-                    <div key={i}>{username + ": " + (m.content || m)}</div>
+                        <div key={i}>{username + ": " + (m.content || m)}</div>
                     ))}
                 </div>
                 <input value={message} onChange={(e) => setMessage(e.target.value)} />

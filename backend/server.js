@@ -130,6 +130,29 @@ io.on("connection", (socket) => {
         }
     });
 
+    socket.on("getRoomInfo", async (roomID) => {
+        try {
+            const roomInfo = await pool.query(
+                "SELECT * FROM ChatRooms WHERE id = $1",
+                [roomID]
+            )
+            socket.emit("getRoomInfo", roomInfo.rows[0]);
+        } catch (err) {
+            console.log("Error in getRoomInfo", err);
+        }
+    })
+
+    socket.on("getRooms", async () => {
+        try {
+            const rooms = await pool.query(
+                "SELECT * FROM ChatRooms"
+            )
+            socket.emit("getRooms", rooms.rows);
+        } catch (err) {
+            console.log("Error in getRooms", err);
+        }
+    })
+
 });
 
 // Server is on port 8080
