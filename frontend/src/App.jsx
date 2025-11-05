@@ -5,6 +5,8 @@ import Registration from "./pages/Registration.jsx";
 import Settings from "./pages/Settings.jsx";
 import JoinRoom from "./pages/JoinRoom.jsx";
 import "./styles/global.css";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function App() {
   return (

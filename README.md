@@ -52,6 +52,8 @@ Make sure you have [Node.js](https://nodejs.org/) installed either through the l
 - Logging in and out as a user
 - Global Chat between users
 - Registering as a user
+- Creating chat rooms
+- Switching between chat rooms
 
 
 ## Tech Stack

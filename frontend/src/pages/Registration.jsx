@@ -12,6 +12,14 @@ function Registration () {
     const [error, setError] = useState("");
     const navigate = useNavigate();
 
+    useEffect(() => {
+        if (JSON.parse(sessionStorage.getItem("user"))) {
+            navigate("/room/1");
+        }
+    }, [JSON.parse(sessionStorage.getItem("user")), navigate]);
+
+    if (JSON.parse(sessionStorage.getItem("user"))) { return null; }
+
     const attemptRegister = (e) => {
         e.preventDefault(); // Stop form from reloading page
 

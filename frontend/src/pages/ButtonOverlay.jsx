@@ -62,7 +62,13 @@ function ButtonOverlay () {
         if (roomID > 0) {
             navigate("/room/" + roomID);
         }
-    }, [roomID])
+    }, [roomID]);
+
+    useEffect(() => {
+        if (!JSON.parse(sessionStorage.getItem("user")).userID) {
+            navigate("/");
+        }
+    })
 
     return (
         <>

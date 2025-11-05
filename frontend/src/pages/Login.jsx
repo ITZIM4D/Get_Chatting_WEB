@@ -11,6 +11,14 @@ function Login () {
     const [userID, setUserID] = useState(null);
     const navigate = useNavigate();
 
+    useEffect(() => {
+        if (JSON.parse(sessionStorage.getItem("user"))) {
+            navigate("/room/1");
+        }
+    }, [JSON.parse(sessionStorage.getItem("user")), navigate]);
+
+    if (JSON.parse(sessionStorage.getItem("user"))) { return null; }
+
     const attemptLogin = (e) => {
         e.preventDefault(); // Stop form from reloading page
         setError(""); // Clear old errors
@@ -42,7 +50,6 @@ function Login () {
             navigate("/room/1");
         }
     }, [userID, navigate, username]);
-
 
     return (
         <>
