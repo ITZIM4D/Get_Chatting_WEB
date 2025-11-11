@@ -79,35 +79,37 @@ function Registration () {
                 </Helmet>
             </HelmetProvider>
             <div className={styles.registration}>
-                <h1> Registration </h1>
-                <form onSubmit={attemptRegister}>
-                    <input 
-                        type="text" 
-                        id="newUsername" 
-                        name="newUsername" 
-                        placeholder="New Username" 
-                        value={newUsername}
-                        onChange={(e) => setNewUsername(e.target.value)}
-                    /><br/><br/>
-                    <input 
-                        type="password"
-                        id= "newPassword" 
-                        name="newPassword" 
-                        placeholder="New Password" 
-                        value={newPassword}
-                        onChange={(e) => setNewPassword(e.target.value)}
-                    /><br/><br/>
-                    <input 
-                        type="password"
-                        id= "confirmPassword" 
-                        name="confirmPassword" 
-                        placeholder="Confirm Password" 
-                        value={confirmPassword}
-                        onChange={(e) => setConfirmPassword(e.target.value)}
-                    /><br/><br/>
-                    <input type="submit" value="Register"/>
-                </form>
-                {error && <p className={styles.error}>{error}</p>}
+                <div className={styles.registrationBox}>
+                    <h1> Create an account </h1>
+                    <form onSubmit={attemptRegister}>
+                        <input 
+                            type="text" 
+                            id="newUsername" 
+                            name="newUsername" 
+                            placeholder="New Username" 
+                            value={newUsername}
+                            onChange={(e) => setNewUsername(e.target.value)}
+                        /><br/><br/>
+                        <input 
+                            type="password"
+                            id= "newPassword" 
+                            name="newPassword" 
+                            placeholder="New Password" 
+                            value={newPassword}
+                            onChange={(e) => setNewPassword(e.target.value)}
+                        /><br/><br/>
+                        <input 
+                            type="password"
+                            id= "confirmPassword" 
+                            name="confirmPassword" 
+                            placeholder="Confirm Password" 
+                            value={confirmPassword}
+                            onChange={(e) => setConfirmPassword(e.target.value)}
+                        /><br/><br/>
+                        <input type="submit" value="Register"/>
+                    </form>
+                    {error && <p className={styles.error}>{error}</p>}
+                </div>
             </div>
         </>
     );

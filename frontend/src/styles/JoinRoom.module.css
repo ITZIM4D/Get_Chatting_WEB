@@ -1,18 +1,23 @@
 .roomList button {
-    color: white;
+    color: #ffc78a;
     background-color: Transparent;
     border: none;
     cursor: pointer;
     margin-right: 40px;
-    font-size: 20px;
-    font-weight:bold;
+    font-size: 48px;
+    font-weight: bold;
+    padding-left: 5vw;
+    padding-bottom: 10px;
+    text-shadow: 2px 0px 0px #755a3e;
+    border-bottom: 1px solid #ffc78a;
+    text-align: left;
+    width: 100vw;
 }
 
 .roomList {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    border: 1px solid #ccc;
     height: 90vh;
     overflow-y: scroll;
 }

@@ -59,9 +59,9 @@ function Login () {
                 </Helmet>
             </HelmetProvider>
             <div className={styles.login}>
+                <h1 className={styles.projectTitle}>Get Chatting</h1>
                 <div className = {styles.loginBox}>
                     <div>
-                        <h1> Login </h1>
                         <form onSubmit={attemptLogin}>
                             <input 
                                 type="text" 

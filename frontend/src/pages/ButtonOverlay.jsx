@@ -73,11 +73,13 @@ function ButtonOverlay () {
     return (
         <>
             <div className={styles.buttonOverlay}>
-                <button className={styles.buttonOverlayButton} onClick={generalChat}> Global Chat </button>
-                <button className={styles.buttonOverlayButton} onClick={joinRoom}> Join Chatroom </button>
-                <button className={styles.buttonOverlayButton} onClick={() => {setShowPopup(true)}}> Create Chatroom </button>
-                <button className={styles.buttonOverlayButton} onClick={settings}> Settings </button>
-                <button className={styles.buttonOverlayButton} onClick={() => {sessionStorage.clear(); navigate("/")}}> Logout </button>
+                <div className={styles.buttons}>
+                    <button className={styles.buttonOverlayButton} onClick={generalChat}> Global Chat </button>
+                    <button className={styles.buttonOverlayButton} onClick={joinRoom}> Join Chatroom </button>
+                    <button className={styles.buttonOverlayButton} onClick={() => {setShowPopup(true)}}> Create Chatroom </button>
+                    <button className={styles.buttonOverlayButton} onClick={settings}> Settings </button>
+                    <button className={styles.buttonOverlayButton} onClick={() => {sessionStorage.clear(); navigate("/")}}> Logout </button>
+                </div>
             </div>
 
             {showPopup && (

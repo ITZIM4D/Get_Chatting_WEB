@@ -44,9 +44,26 @@ io.on("connection", (socket) => {
             )
             
             // Broadcast the saved message to clients
-            io.emit("receiveMessage", messagesResult.rows[0]["content"], usersResult.rows[0]["username"]);
+            io.to(roomID).emit("receiveMessage", messagesResult.rows[0]["content"], usersResult.rows[0]["username"]);
         } catch (err) {
             console.error("DB error in receiveMessage:", err);
+        }
+    });
+
+    socket.on("joinRoom", (roomID) => {
+        socket.join(roomID); 
+        socket.emit("joinedRoom");
+    });
+
+    socket.on("getMessages", async (roomID) => {
+        try {
+            const result = await pool.query(
+                `SELECT m.content, u.username FROM Messages m JOIN Users u ON m.user_id = u.id WHERE m.chatroom_id = $1 ORDER BY m.id ASC`,
+                [roomID]
+            );
+            socket.emit("getMessages", result.rows);
+        } catch (err) {
+            console.error("Error in getMessages:", err);
         }
     });
 

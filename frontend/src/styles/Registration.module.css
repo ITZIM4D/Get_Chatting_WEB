@@ -4,4 +4,32 @@
     align-items: center;
     justify-content: center;
     min-height: 100vh;
+    color: #ffc78a;
+}
+
+.registrationBox {
+    padding: 0px 50px 25px 50px;
+    background: #ffffff;
+    color: #000000;
+    box-shadow: 0px 0px 20px rgb(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+.registrationBox input {
+    width: 100%;
+    max-width: 250px;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 8px;
+}
+
+.registrationBox input[type="submit"] {
+    width: 100%;
+    max-width: 250px;
+    padding: 10px;
+    border: none;
+    background: #ff7a00;
+    color: #ffffff;
+    font-weight: bold;
+    cursor: pointer;
 }

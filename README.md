@@ -46,8 +46,6 @@ This project is a web-based chat application that enables real-time messaging us
    http://localhost:5173
    ```
 
-Make sure you have [Node.js](https://nodejs.org/) installed either through the link or through your package manager of choice.
-
 ## Features
 - Logging in and out as a user
 - Global Chat between users

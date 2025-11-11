@@ -2,7 +2,7 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import socket from "../javascript/socket";
-import "../styles/ChatRoom.module.css";
+import styles from "../styles/ChatRoom.module.css";
 import ButtonOverlay from "./ButtonOverlay.jsx";
 
 function ChatRoom() {
@@ -11,7 +11,6 @@ function ChatRoom() {
     const [message, setMessage] = useState("");
     const [messages, setMessages] = useState([]);
     const [username, setUsername] = useState("");
-    const [roomName, setRoomName] = useState("");
     const navigate = useNavigate();
     const user = JSON.parse(sessionStorage.getItem("user"));
 
@@ -26,36 +25,37 @@ function ChatRoom() {
 
     // Call param function once on first render
     useEffect(() => {
-        const handleMessage = (msg, username) => {
-            setMessages((prev) => [...prev, msg]);
-            setUsername(username);
-        };
-        socket.emit("getRoomInfo", roomID);
+        socket.emit("joinRoom", roomID);
+        socket.on("joinedRoom", () => {
+            socket.emit("getRoomInfo", roomID);
+            socket.emit("getMessages", roomID);
+        })
 
-        socket.on("receiveMessage", handleMessage);
+        socket.on("getMessages", (msgs) => setMessages(msgs));
         socket.on("getRoomInfo", (roomInfo) => {
             setRoomInfo(roomInfo);
         })
+        socket.on("receiveMessage", (msg, username) =>
+            setMessages((prev) => [...prev, { content: msg, username }])
+        );
 
         return () => {
-            socket.off("receiveMessage", handleMessage); 
+            socket.off("joinedRoom");
+            socket.off("receiveMessage"); 
             socket.off("getRoomInfo");
+            socket.off("getMessages");
         };
     }, [roomID]);
 
     const sendMessage = () => {
         if (message.trim() === "") return;
         const userID = user.userID;
-        const roomID = user.roomID;
 
         socket.emit("sendMessage", roomID, userID, message);
 
         setMessage("");
     };
 
-    
-
-    // Remake chatbox eventually
     return (
         <>
             <HelmetProvider>
@@ -64,15 +64,19 @@ function ChatRoom() {
                 </Helmet>
             </HelmetProvider>
             <ButtonOverlay/>
-            <div>
-                <h1>{roomInfo?.name || "Loading..."}</h1>
-                <div style={{ border: "1px solid #ccc", height: "200px", overflowY: "scroll" }}>
-                    {messages.map((m, i) => (
-                        <div key={i}>{username + ": " + (m.content || m)}</div>
-                    ))}
+            <div className={styles.chatRoom}>
+                    <h1 className={styles.roomName}>{roomInfo?.name || "Loading..."}</h1>
+                    <div className={styles.chatAndMessageBox}>
+                        <div className={styles.chatBox}>
+                            {messages.map((m, i) => (
+                                <div key={i}>{m.username + ": " + m.content}</div>
+                            ))}
+                        </div>
+                    <div className={styles.inputBox}>
+                        <input value={message} onChange={(e) => setMessage(e.target.value)} />
+                        <button onClick={sendMessage}>Send</button>
+                    </div>
                 </div>
-                <input value={message} onChange={(e) => setMessage(e.target.value)} />
-                <button onClick={sendMessage}>Send</button>
             </div>
         </>
     );

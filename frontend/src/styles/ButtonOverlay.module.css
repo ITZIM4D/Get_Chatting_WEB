@@ -3,16 +3,22 @@
     border-bottom: 1px solid rgb(255, 255, 255);
     padding-top: 10px;
     padding-bottom: 10px;
+    background: #848585;
 }
 
 .buttonOverlayButton {
-    color: white;
+    color: #ffc78a;
     background-color: Transparent;
     border: none;
     cursor: pointer;
     margin-right: 40px;
-    font-size: 20px;
-    font-weight:bold
+    font-size: 25px;
+    font-weight:bold;
+    text-shadow: 1px 0px 0px #755a3e;
+}
+
+.buttons {
+    margin: 0px 5vw 0px 5vw;
 }
 
 .popup {
